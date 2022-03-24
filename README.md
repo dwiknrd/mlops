@@ -323,3 +323,35 @@ You can also monitor the rollout status by using the kubectl rollout status comm
 ou can delete it easily using the kubectl delete command. You can also delete it from the GCP Console. Either way, Kubernetes will delete all resources managed by the Deployment, especially running pods.
 
 ![deployment_delete](assets/deployment_delete.png)
+
+## Week 2 (On Progress)
+
+## Kubeflow Pipelines on AI Platform
+
+Kubeflow was developed to use Kubernetes to standardize and streamline the DevOps work around machine learning. The DevOps involved in the machine learning process can be quite difficult. It is because during model development and experimentation, the part of the code that includes data preparation, model training, and model evaluation will change significantly. Remember, we will choose the best model from several models that are compared and then save it and use it for prediction. We need an infrastructure that's flexible enough to allow these different versions of the model development pipeline to coexist in the same environment.
+
+In a Kubeflow pipeline, each of these machine learning tasks is conceptualized as a docker container. Each task corresponds to a docker container that's executed. This tasks can be data import, model training, model serving, or model evaluation. 
+
+### Kubeflow Component
+
+A pipeline component is a self-contained set of code that performs one step in ML workflow. Components are defined in a component specification, which defines the following:
+- The component’s interface, its inputs and outputs.
+- The component’s implementation, the container image and the command to execute.
+- The component’s metadata, such as the name and description of the component.
+
+### CI/CD for a Kubeflow Pipeline
+
+![cicd kubeflow](assets/CICD_Kubeflow.PNG)
+
+First, let's imagine that we already have model code. We push new code to our GitHub repo, and all the assets are rebuilt and available in production automatically without having to track or manually trigger all the changes. Continuous integration simply refers to automating the process of this rebuild anytime code changes. In theory, every Container corresponds to a self-contained directory in a repository. When the code changes, this Container should to be rebuilt and push to the Container Registry automatically so the new version is available for consumption in the production environment. Now GitHub uses several triggers to start a new Container build and push. But first, we need to connect our GitHub repo to Cloud Build.   The models are then retrained using the new training images that have been pushed into the registry. If the model meets the criteria, they're deployed to AI platform prediction where there API is monitored.
+
+### Cloud Builders
+
+Cloud Builders is cloud configuration/provisioning action that are packages as Docker containers. Typycal cloud builder actions:
+- Building a Docker image from a Dockerfile
+- Pushing a Docker image into a Google Cloud project registry
+- Deploying a VM instance on Compute Engine
+- Uploading a Kubeflow pipeline CAIP Pipeline
+
+There are 2 types of cloud builders, standard builders and custom builders. 
+
