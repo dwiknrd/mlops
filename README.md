@@ -144,4 +144,182 @@ A more efficient way to resolve the dependency problem is to implement abstracti
 
 Containers are lightweight because they don't carry a full operating system, they can be scheduled or packed tightly onto the underlying system, which is very efficient. They can be created and shut down very quickly because you're just starting and stopping the processes that make up the application and not booting up an entire VM and initializing an operating system for each application. 
 
-You now understand containers as delivery vehicles for application code, they're lightweight, stand-alone, resource efficient, portable execution packages. You develop application code in the usual way, on desktops, laptops, and servers. The container allows you to execute your final code on VMs without worrying about software dependencies like application run times, system tools, system libraries, and other settings. You package your code with all the dependencies it needs, and the engine that executes your container, is responsible for making them available at runtime. Containers appeal to developers because they're an application-centric way to deliver high performance and scalable applications. Containers also allow developers to safely make assumptions about the underlying hardware and software. With a Linux kernel underneath, you no longer have code that works in your laptop but doesn't work in production, the container's the same and runs the same anywhere. You make incremental changes to a container based on a production image, you can deploy it very quickly with a single file copy, this speeds up your development process. Finally, containers make it easier to build applications that use the microservices design pattern. That is, loosely coupled, fine-grained components. This modular design pattern allows the operating system to scale and also upgrade components of an application without affecting the application as a whole.
+
+### Kubernetes
+
+![what is kubernetes](assets/kubernetes.png)
+
+Kubernetes is a popular container management and orchestration solution. It's a container centric management environment. It automates the deployment scaling, load balancing, logging, monitoring, and other management features of containerized applications. 
+- Kubernetes also facilitates the features of an infrastructure as a service, such as allowing a wide range of user preferences and configuration flexibility. 
+- Kubernetes job is to make the deployed system conform to your desired state and then keep it there in spite of failures. 
+- Because the system is desired state is always documented, it also reduces the risk of error.
+
+**Kubernetes Features:**
+
+1. Support both stateful and stateless apllications
+2. Autoscaling
+3. Resource limits
+4. Extensibility
+
+
+#### Google Kubernetes Engine
+
+Google cloud's managed service offering for Kubernetes is called Google, Kubernetes Engine or GKE. 
+
+**Google Kubernetes Engine (GKE)**
+
+![gke_features](assets/gke_features.png)
+
+It will help to <u>deploy, manage and scale Kubernetes environments for containerized applications on GCP</u>. More specifically, GKE is a component of the GCP compute offerings. It makes it easy to bring your Kubernetes workloads into the cloud. 
+
+When you use GKE, you start by directing the service to instantiate a Kubernetes system for you. This system is called a <u>**cluster**</u>. GKE's auto upgrade feature can be enabled to ensure that your clusters are automatically upgraded with the latest and greatest version of Kubernetes. The virtual machines that host your containers inside of a GKE cluster are called <u>**nodes**</u>. 
+
+#### Compute Options Detail
+
+Computing options available in GCP:
+
+![Compute Options Detail](assets/Compute_Options_Detail.png)
+
+1. Compute Engine: offers virtual machines that run on GCP.
+    - Fully customizable virtual machines
+    - Persistent disks and optional local SSDs
+    - Global load balancing and autoscaling
+    - Per-second billing
+2. GKE: is an orchestration system for applications in containers. It automates deployment, scaling, load balancing, logging, and monitoring, and other management features.
+3. App Engine: is a good choice if you simply want to focus on writing code, and you don't want to worry about building the highly reliable and scalable infrastructure that'll run on.
+4. Cloud Run:  is serverless, it distracts way all the infrastructure management so you can focus on developing applications.
+5. Cloud Functions:  is serverless, it distracts way all the infrastructure management so you can focus on developing applications.
+
+## Kubernetes Architectures
+
+### Kubernetes Concepts
+
+To understand how Kubernetes works, there are two related concepts you need to understand. 
+
+1. The first is the Kubernetes object model. 
+    - Each thing Kubernetes manages is represented by an object. You can view and change these objects, attributes, and state. 
+
+    ![Kubernetes_object](assets/Kubernetes_object.png)
+
+2. The second is the principle of declarative management
+    - Kubernetes expects you to tell it what you want, the state of the objects under each management to be.
+
+### Kubernetes Control Plane
+
+![control_plane](assets/control_plane.png)
+
+- First and foremost, your cluster needs computers. Nowadays, the computers that compose your clusters are usually virtual machines.
+- One computer is called the master and the others are called simply, nodes. 
+    + The job of the nodes is to run pods. 
+    + The job of the master is to coordinate the entire cluster. 
+- The single component that you interact with directly is the kube-APIserver. 
+    + This component's job is to accept commands that view or change the state of the cluster, including launching pods. 
+- Etcd is the cluster's database. 
+    + Its job is to reliably store the state of the cluster. 
+    + This includes all the cluster configuration data and more dynamic information such as what nodes are part of the cluster, what pods should be running, and where they should be running. You never interact directly with etcd.
+
+## Deployment and Jobs
+
+### Deployments
+
+Deployment subscriber desired state of pods, for example, a desire state could be that you want to make sure that 5 engine X pods are running at all times. It's declared of sense means that Kubernetes will continuously make sure the configuration is running across your cluster. Kubernetes also supports various update mechanisms for deployments, which I'll tell you about later in this module. Deployments declared a state of pots every time you update the specification of the pods.
+
+The deployments progressing state indicates that a task is being performed:
+1. Progressing State: Creating a new replica set, or scaling up or scaling down a replica set.
+2. Complete State: indicates that all new replicas have been updated to the latest version in are available and no old replicas are running
+3. Failed State: Occurs when the creation of a new replica set could not be completed
+
+### Way to create deployment
+
+![create_deploy_1_2](assets/create_deploy_1_2.png)
+
+1. Create a deployment declaratively using a manifest file, such as a YAML file you've just seen and a kubectl apply command. 
+2. Create a deployment imperatively, using a kubectl run command that specifies the parameters in line. Here the image and tag specifies which image and image version to run in the container. This deployment will launch three replicas, expose port 8080. Labels are defined using key and value dash hash generator, specifies the API version to be used, and dash hash save dash config saves the configuration for future use. 
+3. Use the GKE workloads menu in the GCP console. Here, you can specify the container image and version, or even selected directly from the container registry. 
+
+![create_deploy_3](assets/create_deploy_3.png)
+
+You can specify environment variables and initialization commands. You can also add an application name, and namespace along with labels. You can use the view YAML button on the last page of the deployment wizard to view that deployment specification in YAML format
+
+The replica set created by the deployment ensure that the desired number of pods are running, and always available at any given time. If a pod fails or is evicted, the replica set automatically launches a new pod. You can use the kubectl get in the scribe commands to inspect the state and details of the deployment.
+
+![create_deploy_4](assets/create_deploy_4.png)
+
+As shown above, you can get the desired, current, up to date and available status, of all the replicas within an deployment along with their ages, using the kubectl get deployment command. 
+- Desired, shows the desired number of replicas in the deployment specification. Current is the number of replicas currently running. 
+- Up-to-date, shows the number of replicas that are fully up-to-date as per the current deployment specification. 
+- Available displays the number of replicas available to the users.
+
+You can also output the deployment configuration in a YAML format. This is a useful trick. Maybe you originally created a deployment with kubectl run, then you decided you'd like to make it permanent managed part of your infrastructure. Edit that YAML file to remove the unique details of the deployment you created it from. Then you can add it to your repository of YAML files for future deployments. For more detailed information about the deployment, use the kubectl describe command. 
+
+![create_deploy_5](assets/create_deploy_5.png)
+
+Another way to inspect a deployment is to use of GCP console. Here you can see detailed information about the deployment, revision history, the pods, events, and also view the live configuration in YAML format.
+
+![create_deploy_6](assets/create_deploy_6.png)
+
+### Service and Scaling
+
+You'll probably need to scale the deployment.
+
+![service_n_scaling1](assets/service_n_scaling1.png)
+
+You scale the deployment manually using a kubectl command or the GCP console by defining the number of replicas, also manually changing the manifest will scale the deployment. You can also autoscale the deployment by specifying the minimum and maximum number of desired pods along with the CPU utilization threshold. Again you can perform auto-scaling by using the kubectl autoscale command or from the GCP console directly. This leads to the creation of a Kubernetes object called horizontal pod Autoscaler. This object performs the actual scaling to match the target CPU utilization. 
+
+![service_n_scaling1](assets/service_n_scaling2.png)
+
+Thrashing sounds bad, and it is bad. It's a phenomenon where the number of deployed replicas frequently fluctuates, because the metric used to control scaling also frequently fluctuates. The horizontal pod Autoscaler supports a cool-down or delay feature. It allows you to specify a wait period before performing an under-skilled town action. The default value is five minutes.
+
+![service_n_scaling1](assets/service_n_scaling3.png)
+
+### Updating Deployments
+
+When you make a change to a deployments port specification such as changing the image version an automatic update rollout will happens.
+
+![updating_deployments1](assets/updating_deployments1.png)
+
+Again, note that these automatic updates are only applicable to the changes in port specifications.
+
+1. You can update a deployment in different ways. One way is to use a kubectl apply command with an updated deployments specification YAML file. This method allows you to update other specification of a deployment such as the number of replicas outside the pod template.
+
+![updating_deployments2](assets/updating_deployments2.png)
+
+2. Another way is to use a kubectl set command. This allows you to change the pod template, specifications for the deployment such as the image, resources, or selector values. 
+
+![updating_deployments3](assets/updating_deployments3.png)
+
+3. Another way is to use the kubectl edit command. This opens a specification file using the Vim editor that allows you to make changes directly. Once you exit and save the file, kubectl automatically applies the updated file.
+
+![updating_deployments4](assets/updating_deployments4.png)
+
+4. The last option for you to update a deployment is through the GCP Console. You can edit an employment manifest from the GCP Console and perform a rolling update along with this additional options. 
+
+![updating_deployments5](assets/updating_deployments5.png)
+
+### Managing Deployments
+
+When you edit a Deployment, your action normally triggers an automatic rollout. But if you have an environment where small fixes are released frequently, you'll have a large number of rollouts. In a situation like that, you'll find it more difficult to link issues with specific rollouts.
+
+1. Pausing a Deployment
+
+To help, you can temporarily pause these rollouts by using the kubectl rollout pause command. The initial state of the Deployment prior to pausing will continue its function. But new updates to suit the Deployment will not have any effect while the rollout is paused.
+
+![deployment_pause](assets/deployment_pause.png)
+
+2. Resume a Seployment 
+
+The changes will only be implemented once a rollout is resumed. When you resume the rollout, all these new changes will be rolled out with a single revision. 
+
+![deployment_resume](assets/deployment_resume.png)
+
+3. Monitoring a Deployment
+
+You can also monitor the rollout status by using the kubectl rollout status command. 
+
+![deployment_monitoring](assets/deployment_monitoring.png)
+
+4. Deleting a deployment
+
+ou can delete it easily using the kubectl delete command. You can also delete it from the GCP Console. Either way, Kubernetes will delete all resources managed by the Deployment, especially running pods.
+
+![deployment_delete](assets/deployment_delete.png)
