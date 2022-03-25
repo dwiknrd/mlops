@@ -2,6 +2,10 @@
 
 In this notes we introduce machine learning operations or MLOps for short it's concepts, terminology in components. We start by providing an overview of why in when to employ MLOps. In the main pain points addresses. Then we will provide an introduction to kubernetes components such as Docker containers, pods, namespaces, clusters in container registry's. These will prepare you for a good understanding of AI pipelines using Q flow, so you will learn how to use Q flow pipelines to orchestrate the amount pipelines you build. Feel free to skip this module if you already familiar with such concepts. Then we discuss the phases of machine learning project in the context of a pipeline and also look at how to scale pipeline development with Google Cloud. Finally, we will cover Q Flow pipelines in detail, Q flow pipelines is an open source machine learning platform that was designed to enable the use of machine learning pipelines to orchestrate complicated workflows running a Kubernetes.
 
+<hr>
+
+## Week 1
+
 ## Why and When to Employ MLOps
 
 ### Data Scientist's Pain Points
@@ -324,7 +328,14 @@ ou can delete it easily using the kubectl delete command. You can also delete it
 
 ![deployment_delete](assets/deployment_delete.png)
 
+<hr>
+
 ## Week 2 (On Progress)
+
+
+<hr>
+
+## Week 3 (On Progress)
 
 ## Kubeflow Pipelines on AI Platform
 
